@@ -1,3 +1,10 @@
+import Vue from 'vue';
+import axios from 'axios';
+import DateRangePicker from 'vue2-daterange-picker';
+
+window.Vue = require('vue');
+window.axios = require('axios');
+window.DateRangePicker = require('vue2-daterange-picker');
 
 window._ = require('lodash');
 
@@ -55,3 +62,5 @@ if (token) {
 //     cluster: process.env.MIX_PUSHER_APP_CLUSTER,
 //     encrypted: true
 // });
+
+
