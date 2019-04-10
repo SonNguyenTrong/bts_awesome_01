@@ -34,8 +34,8 @@ mix.styles([
 ], 'public/css/common_css/user/user_home.css');
 
 mix.js([
-    'resources/js/bootstrap.js',
     'node_modules/jquery/dist/jquery.min.js',
+    'resources/js/bootstrap.js',
     'node_modules/admin-lte/dist/js/demo.js',
 ], 'public/js/common_js/admin/admin.js')
    .js([

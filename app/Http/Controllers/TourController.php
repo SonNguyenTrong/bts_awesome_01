@@ -2,10 +2,31 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Tour;
+use App\Models\Province;
+use App\Models\Service;
 use Illuminate\Http\Request;
+use App\Repositories\Tour\TourRepositoryInterface;
+use App\Repositories\Image\ImageRepositoryInterface;
+use App\Repositories\Service\ServiceRepositoryInterface;
+use App\Repositories\Province\ProvinceRepositoryInterface;
+use App\Http\Requests\TourStoreRequest;
 
 class TourController extends Controller
 {
+    private $tourRepository;
+    private $imageRepository;
+    private $provinceRepoRepository;
+    private $serviceRepoRepository;
+
+    public function __construct(TourRepositoryInterface $tour, ImageRepositoryInterface $image, provinceRepositoryInterface $province, serviceRepositoryInterface $service)
+    {
+        $this->tourRepository = $tour;
+        $this->imageRepository = $image;
+        $this->provinceRepository = $province;
+        $this->serviceRepository = $service;
+    }
+
     /**
      * Display a listing of the resource.
      *
@@ -23,7 +44,10 @@ class TourController extends Controller
      */
     public function create()
     {
-        //
+        $provinces = $this->provinceRepository->all();
+        $services = $this->serviceRepository->all();
+
+        return view('admin.modules.tour',compact('provinces','services'));
     }
 
     /**
@@ -32,24 +56,23 @@ class TourController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(TourStoreRequest $request)
     {
-        $this->validate($request, [
-            'name' => 'required|min:5',
-            'price' => 'required',
-            'duration' => 'required',
-            'description' => 'required',
-            'image' => 'required',
-        ]);
-        Product::create([
-            'name'     => $request->input('name'),
-            'price'    => $request->input('price'),
-            'price'    => $request->input('price'),
-            'price'    => $request->input('price'),
+        $image = $this->imageRepository->saveTourImage($request->image);
+        $imageId = $this->imageRepository->firstOrCreate(['name' => $image],['name' => $image]);
+        $tour = $this->tourRepository->create([
+            'name' => $request->name,
+            'price' => $request->price,
+            'duration' => $request->duration,
+            'description' => $request->description,
+            'status' => $request->status,
+            'image_id' => $imageId->id,
         ]);
         return response([
-            'result' => 'success'
+            'result' => 'success',
+            'tour' => $tour,
         ], 200);
+        
     }
 
     /**
@@ -81,9 +104,10 @@ class TourController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Request $request, Tour $tour)
     {
-        //
+        $this->tourRepository->update($tour, $request);
+        return redirect('/tours');
     }
 
     /**

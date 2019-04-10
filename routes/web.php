@@ -11,11 +11,15 @@
 |
 */
 
+/* Tour api */
+
+
 /* Web routes for admin */
 Route::group(['prefix' => 'admin'/* , 'middleware' => 'admin' */], function () {
-     Route::get('/', 'AdminController@index')->name('dashboard');
-     Route::get('/tour', 'AdminController@tour')->name('admin-tour');
- });
+    Route::resource('tours', 'TourController');
+    Route::resource('days', 'DayController');
+    Route::get('/', 'AdminController@index')->name('dashboard');
+});
 
 /* Web routes for authen */
 Route::group(['prefix' => 'account'], function () {
