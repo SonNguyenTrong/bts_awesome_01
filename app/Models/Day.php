@@ -31,6 +31,6 @@ class Day extends Model
     }
     
     public function services(){
-        return $this->belongsToMany(Province::class, 'day_services');
+        return $this->belongsToMany(Service::class, 'day_services');
     }
 }

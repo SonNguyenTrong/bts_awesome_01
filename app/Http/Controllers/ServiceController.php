@@ -2,10 +2,19 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Service;
 use Illuminate\Http\Request;
+use App\Repositories\Service\ServiceRepositoryInterface;
 
-class AdminController extends Controller
+class ServiceController extends Controller
 {
+    private $serviceRepoRepository;
+
+    public function __construct(ServiceRepositoryInterface $service)
+    {
+        $this->serviceRepository = $service;
+    }
+    
     /**
      * Display a listing of the resource.
      *
@@ -13,7 +22,7 @@ class AdminController extends Controller
      */
     public function index()
     {
-        return view('admin.modules.dashboard');
+        //
     }
 
     /**
@@ -77,8 +86,8 @@ class AdminController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(Service $service)
     {
-        //
+        $this->serviceRepository->deleteCascadeById($service);
     }
 }
